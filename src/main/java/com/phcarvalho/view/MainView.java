@@ -16,7 +16,7 @@ public class MainView extends JFrame {
     private JPanel bottomPanel;
     private ConnectedUserView connectedUserView;
     private GameView gameView;
-    private MenuView menuView;
+    private ConnectionView connectionView;
 
     public MainView(MainController controller) {
         this.controller = controller;
@@ -25,7 +25,7 @@ public class MainView extends JFrame {
         bottomPanel = new JPanel(new GridBagLayout());
         connectedUserView = DependencyFactory.getSingleton().get(ConnectedUserView.class);
         gameView = DependencyFactory.getSingleton().get(GameView.class);
-        menuView = DependencyFactory.getSingleton().get(MenuView.class);
+        connectionView = DependencyFactory.getSingleton().get(ConnectionView.class);
         initialize();
     }
 
@@ -55,7 +55,7 @@ public class MainView extends JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(2, 4, 2, 4);;
-        bottomPanel.add(menuView, gridBagConstraints);
+        bottomPanel.add(connectionView, gridBagConstraints);
 
         setTitle(TITLE);
         setContentPane(mainPanel);
@@ -86,7 +86,7 @@ public class MainView extends JFrame {
         return gameView;
     }
 
-    public MenuView getMenuView() {
-        return menuView;
+    public ConnectionView getConnectionView() {
+        return connectionView;
     }
 }

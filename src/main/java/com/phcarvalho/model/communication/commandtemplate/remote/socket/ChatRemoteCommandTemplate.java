@@ -5,6 +5,7 @@ import com.phcarvalho.model.communication.commandtemplate.remote.IChatRemoteComm
 import com.phcarvalho.model.communication.connection.IConnectionHandlerStrategy;
 import com.phcarvalho.model.communication.protocol.vo.command.SendMessageCommand;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.model.exception.ConnectionException;
 
 public class ChatRemoteCommandTemplate implements IChatRemoteCommandTemplate {
 
@@ -15,7 +16,7 @@ public class ChatRemoteCommandTemplate implements IChatRemoteCommandTemplate {
     }
 
     @Override
-    public void sendMessage(SendMessageCommand sendMessageCommand, User remoteUser){
+    public void sendMessage(SendMessageCommand sendMessageCommand, User remoteUser) throws ConnectionException {
         connectionHandlerStrategy.send(sendMessageCommand, remoteUser);
     }
 }

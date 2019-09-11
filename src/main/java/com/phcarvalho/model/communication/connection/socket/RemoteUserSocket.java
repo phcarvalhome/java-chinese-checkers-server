@@ -7,6 +7,7 @@ import com.phcarvalho.model.communication.commandtemplate.local.socket.CommandIn
 import com.phcarvalho.model.communication.protocol.vo.RemoteEvent;
 import com.phcarvalho.model.communication.protocol.vo.command.ICommand;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.model.exception.ConnectionException;
 import com.phcarvalho.model.util.LogUtil;
 import com.phcarvalho.view.util.DialogUtil;
 
@@ -19,9 +20,8 @@ import java.util.concurrent.Executors;
 public class RemoteUserSocket {
 
     public static final String CLIENT_CONNECTION = "Client Connection";
-    public static final String IO_STREAM_OPENING = "I/O Stream Opening";
-    public static final String INPUT_STREAMING_PROCESSING = "Input Stream Processing";
-    public static final String OUTPUT_STREAM_PROCESSING = "Remote Event Sending";
+    public static final String RECEIVE_REMOTE_COMMAND = "Receive Remote Command";
+    public static final String SEND_REMOTE_COMMAND = "Send Remote Command";
     public static final String SOCKET_CLOSING = "Socket Closing";
     public static final String INPUT_STREAM_CLOSING = "Input Stream Closing";
     public static final String OUTPUT_STREAM_CLOSING = "Output Stream Closing";
@@ -38,26 +38,16 @@ public class RemoteUserSocket {
     private ConnectedUserModel connectedUserModel;
     private GameModel gameModel;
 
-    public RemoteUserSocket(Socket socket) {
+    public RemoteUserSocket(Socket socket) throws IOException {
         this.socket = socket;
         commandInvoker = DependencyFactory.getSingleton().get(CommandInvoker.class);
-        buildObjectIOStream();
+        objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        objectInputStream = new ObjectInputStream(socket.getInputStream());
         dialogUtil = DependencyFactory.getSingleton().get(DialogUtil.class);
         connectedUserModel = DependencyFactory.getSingleton().get(ConnectedUserModel.class);
         gameModel = DependencyFactory.getSingleton().get(GameModel.class);
         setRemoteUser();
         waitRemoteEvent();
-    }
-
-    public void buildObjectIOStream(){
-
-        try {
-            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
-        } catch (IOException e) {
-            LogUtil.logError("Error in the I/O stream opening! Client: " + remoteUser, IO_STREAM_OPENING, e);
-            closeResources();
-        }
     }
 
     private void setRemoteUser() {
@@ -76,7 +66,7 @@ public class RemoteUserSocket {
 
                     commandInvoker.execute(remoteEvent);
                 } catch (IOException | ClassNotFoundException e) {
-                    LogUtil.logError("Error in the input stream processing! Client: " + remoteUser, INPUT_STREAMING_PROCESSING, e);
+                    LogUtil.logError("Error in the remote command receiving! Client: " + remoteUser, RECEIVE_REMOTE_COMMAND, e);
                     connectedUserModel.remove(remoteUser);
                     gameModel.remove(remoteUser);
                     closeResources();
@@ -87,7 +77,7 @@ public class RemoteUserSocket {
         });
     }
 
-    private void closeResources(){
+    public void closeResources(){
 
         try {
             socket.close();
@@ -108,10 +98,11 @@ public class RemoteUserSocket {
         }
     }
 
-    public void send(ICommand remoteCommand) {
+    public void send(ICommand remoteCommand) throws ConnectionException {
 
         if((socket == null) || (!socket.isConnected()))
-            LogUtil.logError("The client is not connected! Client: " + remoteUser, CLIENT_CONNECTION);
+//            LogUtil.logError("The client is not connected! Client: " + remoteUser, CLIENT_CONNECTION);
+            throw new ConnectionException("The client is not connected! Client: " + remoteUser, CLIENT_CONNECTION);
 
         try {
             RemoteEvent remoteEvent = new RemoteEvent(remoteCommand);
@@ -120,8 +111,10 @@ public class RemoteUserSocket {
             objectOutputStream.reset();
             LogUtil.logInformation(remoteEvent.toString(), REMOTE_EVENT_SENT);
         } catch (IOException e) {
-            LogUtil.logError("Error in the output stream processing! Client: " + remoteUser, OUTPUT_STREAM_PROCESSING, e);
+//            LogUtil.logError("Error in the output stream processing! Client: " + remoteUser, OUTPUT_STREAM_PROCESSING, e);
             closeResources();
+
+            throw new ConnectionException("Error in the remote command sending! Client: " + remoteUser, e, SEND_REMOTE_COMMAND);
         }
     }
 

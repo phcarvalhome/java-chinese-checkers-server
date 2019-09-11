@@ -1,21 +1,22 @@
 package com.phcarvalho.view;
 
-import com.phcarvalho.controller.MenuController;
+import com.phcarvalho.controller.ConnectionController;
 import com.phcarvalho.dependencyfactory.DependencyFactory;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.model.exception.ConnectionException;
 import com.phcarvalho.view.util.DialogUtil;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-public class MenuView extends JPanel {
+public class ConnectionView extends JPanel {
 
     public static final int DEFAULT_PORT = 9999;
     public static final String START_SERVER = "Start Server";
     public static final String EMPTY_LABEL = "-";
 
-    private MenuController controller;
+    private ConnectionController controller;
     private DialogUtil dialogUtil;
     private JButton startServerButton;
     private JLabel serverStatusLabel;
@@ -23,7 +24,7 @@ public class MenuView extends JPanel {
     private JLabel localPortLabel;
     private JLabel localPortValueLabel;
 
-    public MenuView(MenuController controller) {
+    public ConnectionView(ConnectionController controller) {
         super(new GridBagLayout());
         this.controller = controller;
         dialogUtil = DependencyFactory.getSingleton().get(DialogUtil.class);
@@ -78,8 +79,14 @@ public class MenuView extends JPanel {
     private void startServer(){
         Integer port = getPort();
 
-        if(port != null)
-            controller.startServer(port);
+        if(port != null) {
+
+            try {
+                controller.startServer(port);
+            } catch (ConnectionException e) {
+                dialogUtil.showError(e.getMessage(), e.getTitle(), e);
+            }
+        }
     }
 
     private Integer getPort() {
@@ -100,7 +107,7 @@ public class MenuView extends JPanel {
         return getPort();
     }
 
-    public void setLocalUser(User localUser) {
+    public void startServerByCallback(User localUser) {
         serverStatusValueLabel.setText("Up");
         localPortValueLabel.setText(localUser.getPort().toString());
         startServerButton.setEnabled(false);

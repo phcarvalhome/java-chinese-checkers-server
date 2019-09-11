@@ -11,6 +11,7 @@ import com.phcarvalho.model.communication.protocol.vo.command.AddGameCommand;
 import com.phcarvalho.model.communication.protocol.vo.command.AddPlayerCommand;
 import com.phcarvalho.model.configuration.Configuration;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.model.exception.ConnectionException;
 import com.phcarvalho.model.vo.Player;
 
 import javax.swing.*;
@@ -37,7 +38,15 @@ public class GameModel {
 
         List<User> remoteUserList = Configuration.getSingleton().getRemoteUserList();
 
-        remoteUserList.forEach(remoteUser -> mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser));
+        remoteUserList.forEach(remoteUser -> {
+
+            try {
+                mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser);
+            } catch (ConnectionException e) {
+                e.printStackTrace();
+                //TODO add handling...
+            }
+        });
         controller.add(remoteGame);
         list.addElement(remoteGame);
     }
@@ -50,7 +59,12 @@ public class GameModel {
     private void sendAll(User remoteUser, Game game) {
         AddGameCommand addGameCommand = new AddGameCommand(game, false);
 
-        mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser);
+        try {
+            mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser);
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+            //TODO add handling...
+        }
     }
 
     public void remove(User user) {
@@ -64,7 +78,13 @@ public class GameModel {
         List<User> remoteUserList = Configuration.getSingleton().getRemoteUserList();
 
         remoteUserList.forEach(remoteUser -> {
-            mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser);
+
+            try {
+                mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser);
+            } catch (ConnectionException e) {
+                e.printStackTrace();
+                //TODO add handling...
+            }
         });
         list.removeElement(game);
     }
@@ -77,7 +97,15 @@ public class GameModel {
         localGame.addPlayer(addPlayerCommand.getPlayer());
         remoteGame.getPlayerList().clear();
         remoteGame.getPlayerList().addAll(localGame.getPlayerList());
-        remoteUserList.forEach(remoteUser -> mainRemoteCommandTemplate.addPlayer(addPlayerCommand, remoteUser));
+        remoteUserList.forEach(remoteUser -> {
+
+            try {
+                mainRemoteCommandTemplate.addPlayer(addPlayerCommand, remoteUser);
+            } catch (ConnectionException e) {
+                e.printStackTrace();
+                //TODO add handling...
+            }
+        });
     }
 
     public void movePiece(MovePieceCommand movePieceCommand) {
@@ -91,8 +119,16 @@ public class GameModel {
 
         remoteGame.setTurnPlayer(nextTurnPlayer);
         localGame.setTurnPlayer(nextTurnPlayer);
-        localGame.getRemoteUserList().forEach(remoteUser -> boardRemoteCommandTemplate
-                .movePiece(movePieceCommand, remoteUser));
+        localGame.getRemoteUserList().forEach(remoteUser -> {
+
+            try {
+                boardRemoteCommandTemplate
+                        .movePiece(movePieceCommand, remoteUser);
+            } catch (ConnectionException e) {
+                e.printStackTrace();
+                //TODO add handling...
+            }
+        });
     }
 
     public void flagAsReady(FlagAsReadyCommand flagAsReadyCommand) {
@@ -107,8 +143,16 @@ public class GameModel {
         else
             remoteUserList = localGame.getRemoteUserList();
 
-        remoteUserList.forEach(remoteUser -> mainRemoteCommandTemplate
-                .flagAsReady(new FlagAsReadyCommand(flagAsReadyCommand.getPlayer(), localGame), remoteUser));
+        remoteUserList.forEach(remoteUser -> {
+
+            try {
+                mainRemoteCommandTemplate
+                        .flagAsReady(new FlagAsReadyCommand(flagAsReadyCommand.getPlayer(), localGame), remoteUser);
+            } catch (ConnectionException e) {
+                e.printStackTrace();
+                //TODO add handling...
+            }
+        });
     }
 
     public DefaultListModel<Game> getList() {

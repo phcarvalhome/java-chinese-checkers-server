@@ -3,11 +3,11 @@ package com.phcarvalho.dependencyfactory;
 import com.phcarvalho.controller.ConnectedUserController;
 import com.phcarvalho.controller.GameController;
 import com.phcarvalho.controller.MainController;
-import com.phcarvalho.controller.MenuController;
+import com.phcarvalho.controller.ConnectionController;
 import com.phcarvalho.model.ConnectedUserModel;
 import com.phcarvalho.model.GameModel;
 import com.phcarvalho.model.MainModel;
-import com.phcarvalho.model.MenuModel;
+import com.phcarvalho.model.ConnectionModel;
 import com.phcarvalho.model.communication.commandtemplate.local.socket.CommandInvoker;
 import com.phcarvalho.model.communication.commandtemplate.remote.IBoardRemoteCommandTemplate;
 import com.phcarvalho.model.communication.commandtemplate.remote.IChatRemoteCommandTemplate;
@@ -20,7 +20,7 @@ import com.phcarvalho.model.communication.connection.socket.SocketHandlerStrateg
 import com.phcarvalho.view.ConnectedUserView;
 import com.phcarvalho.view.GameView;
 import com.phcarvalho.view.MainView;
-import com.phcarvalho.view.MenuView;
+import com.phcarvalho.view.ConnectionView;
 import com.phcarvalho.view.util.DialogUtil;
 
 import java.util.HashMap;
@@ -55,7 +55,7 @@ public class DependencyFactory {
 
         buildConnectedUserMVC();
         buildGameMVC();
-        buildMenuMVC();
+        buildConnectionMVC();
         buildMainMVC();
 
         get(CommandInvoker.class).buildCommandObserverMap();
@@ -83,19 +83,19 @@ public class DependencyFactory {
         gameController.initializeList();
         dependencyMap.put(GameView.class, gameView);
         dependencyMap.put(GameModel.class, gameModel);
-        get(IConnectionHandlerStrategy.class).setGameModel(gameModel);
+//        get(IConnectionHandlerStrategy.class).setGameModel(gameModel);
     }
 
-    private void buildMenuMVC() {
-        MenuController menuController = new MenuController();
-        MenuView menuView = new MenuView(menuController);
-        MenuModel menuModel = new MenuModel(menuController);
+    private void buildConnectionMVC() {
+        ConnectionController connectionController = new ConnectionController();
+        ConnectionView connectionView = new ConnectionView(connectionController);
+        ConnectionModel connectionModel = new ConnectionModel(connectionController);
 
-        menuController.setView(menuView);
-        menuController.setModel(menuModel);
-        dependencyMap.put(MenuView.class, menuView);
-        dependencyMap.put(MenuModel.class, menuModel);
-        get(IConnectionHandlerStrategy.class).setMenuModel(menuModel);
+        connectionController.setView(connectionView);
+        connectionController.setModel(connectionModel);
+        dependencyMap.put(ConnectionView.class, connectionView);
+        dependencyMap.put(ConnectionModel.class, connectionModel);
+//        get(IConnectionHandlerStrategy.class).setConnectionModel(connectionModel);
     }
 
     private void buildMainMVC() {
@@ -108,6 +108,8 @@ public class DependencyFactory {
         dependencyMap.put(MainView.class, mainView);
         dependencyMap.put(MainModel.class, mainModel);
         get(DialogUtil.class).setMainView(mainView);
+        get(IConnectionHandlerStrategy.class).setMainModel(mainModel);
+        //TODO talvez fazer o set de cada model que foi colocado lá...
     }
 
     public <T> T get(Class<T> type){

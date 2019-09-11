@@ -1,11 +1,11 @@
 package com.phcarvalho.model.communication.connection.socket;
 
 import com.phcarvalho.dependencyfactory.DependencyFactory;
-import com.phcarvalho.model.GameModel;
-import com.phcarvalho.model.MenuModel;
+import com.phcarvalho.model.MainModel;
 import com.phcarvalho.model.communication.connection.IConnectionHandlerStrategy;
 import com.phcarvalho.model.communication.protocol.vo.command.ICommand;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.model.exception.ConnectionException;
 import com.phcarvalho.model.util.LogUtil;
 import com.phcarvalho.view.util.DialogUtil;
 
@@ -27,8 +27,7 @@ public class SocketHandlerStrategy implements IConnectionHandlerStrategy {
 
     private DialogUtil dialogUtil;
 
-    private MenuModel menuModel;
-    private GameModel gameModel;
+    private MainModel mainModel;
 
     public SocketHandlerStrategy() {
         remoteUserSocketMap = new HashMap<>();
@@ -36,28 +35,25 @@ public class SocketHandlerStrategy implements IConnectionHandlerStrategy {
     }
 
     @Override
-    public void startServer(Integer port){
+    public void startServer(Integer port) throws ConnectionException {
 
-        if((serverSocket != null) && (!serverSocket.isClosed())){
-            dialogUtil.showInformation("The server is already up!", SERVER_CREATION);
-
-            return;
-        }
+        if((serverSocket != null) && (!serverSocket.isClosed()))
+            throw new ConnectionException("The server is already up!", SERVER_CREATION);
 
         try {
             serverSocket = new ServerSocket(port);
             dialogUtil.showInformation("The server is up!", SERVER_CREATION);
-            setLocalUser(port);
+            startServerByCallback(port);
             waitConnectionRequest();
         } catch (IOException e) {
-            dialogUtil.showError("Error in the server creation!", SERVER_CREATION, e);
+            throw new ConnectionException("Error in the server creation!", e, SERVER_CREATION);
         }
     }
 
-    private void setLocalUser(Integer port) {
+    private void startServerByCallback(Integer port) {
         User localUser = User.ofServer(serverSocket.getInetAddress().getHostName(), port);
 
-        menuModel.setLocalUser(localUser);
+        mainModel.startServerByCallback(localUser);
     }
 
     private void waitConnectionRequest() {
@@ -77,15 +73,15 @@ public class SocketHandlerStrategy implements IConnectionHandlerStrategy {
         });
     }
 
-    private void addRemoteUserSocket(Socket socket){
+    private void addRemoteUserSocket(Socket socket) throws IOException {
         RemoteUserSocket remoteUserSocket = new RemoteUserSocket(socket);
 
         remoteUserSocketMap.put(remoteUserSocket.getRemoteUser(), remoteUserSocket);
-        gameModel.sendAll(remoteUserSocket.getRemoteUser());
+        mainModel.sendAll(remoteUserSocket.getRemoteUser());
     }
 
     @Override
-    public void send(ICommand remoteCommand, User remoteUser) {
+    public void send(ICommand remoteCommand, User remoteUser) throws ConnectionException {
         RemoteUserSocket remoteUserSocket = remoteUserSocketMap.get(remoteUser);
 
         if(remoteUserSocket.getSocket().isConnected())
@@ -93,17 +89,14 @@ public class SocketHandlerStrategy implements IConnectionHandlerStrategy {
     }
 
     @Override
-    public void forward(List<User> remoteUserList, ICommand command) {
-        remoteUserList.forEach(remoteUser -> send(command, remoteUser));
+    public void forward(List<User> remoteUserList, ICommand command) throws ConnectionException {
+
+        for (User remoteUser : remoteUserList)
+            send(command, remoteUser);
     }
 
     @Override
-    public void setMenuModel(MenuModel menuModel) {
-        this.menuModel = menuModel;
-    }
-
-    @Override
-    public void setGameModel(GameModel gameModel) {
-        this.gameModel = gameModel;
+    public void setMainModel(MainModel mainModel) {
+        this.mainModel = mainModel;
     }
 }

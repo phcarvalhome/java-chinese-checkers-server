@@ -7,6 +7,7 @@ import com.phcarvalho.model.communication.protocol.vo.command.AddGameCommand;
 import com.phcarvalho.model.communication.protocol.vo.command.AddPlayerCommand;
 import com.phcarvalho.model.communication.protocol.vo.command.FlagAsReadyCommand;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.model.exception.ConnectionException;
 
 public class MainRemoteCommandTemplate implements IMainRemoteCommandTemplate {
 
@@ -17,17 +18,17 @@ public class MainRemoteCommandTemplate implements IMainRemoteCommandTemplate {
     }
 
     @Override
-    public void addGame(AddGameCommand addGameCommand, User remoteUser){
+    public void addGame(AddGameCommand addGameCommand, User remoteUser) throws ConnectionException {
         connectionHandlerStrategy.send(addGameCommand, remoteUser);
     }
 
     @Override
-    public void addPlayer(AddPlayerCommand addPlayerCommand, User remoteUser) {
+    public void addPlayer(AddPlayerCommand addPlayerCommand, User remoteUser) throws ConnectionException {
         connectionHandlerStrategy.send(addPlayerCommand, remoteUser);
     }
 
     @Override
-    public void flagAsReady(FlagAsReadyCommand flagAsReadyCommand, User remoteUser) {
+    public void flagAsReady(FlagAsReadyCommand flagAsReadyCommand, User remoteUser) throws ConnectionException {
         connectionHandlerStrategy.send(flagAsReadyCommand, remoteUser);
     }
 }
