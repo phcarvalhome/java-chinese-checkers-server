@@ -3,12 +3,12 @@ package com.phcarvalho.view;
 import com.phcarvalho.controller.ConnectionController;
 import com.phcarvalho.dependencyfactory.DependencyFactory;
 import com.phcarvalho.model.configuration.entity.User;
-import com.phcarvalho.model.exception.ConnectionException;
 import com.phcarvalho.view.util.DialogUtil;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.rmi.RemoteException;
 
 public class ConnectionView extends JPanel {
 
@@ -83,8 +83,8 @@ public class ConnectionView extends JPanel {
 
             try {
                 controller.startServer(port);
-            } catch (ConnectionException e) {
-                dialogUtil.showError(e.getMessage(), e.getTitle(), e);
+            } catch (RemoteException e) {
+                dialogUtil.showError(e.getMessage(), START_SERVER, e);
             }
         }
     }

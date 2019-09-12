@@ -1,9 +1,9 @@
 package com.phcarvalho.model.communication.protocol.vo.command;
 
-import com.phcarvalho.model.communication.protocol.vo.CommandTypeEnum;
-import com.phcarvalho.model.configuration.entity.Game;
 import com.phcarvalho.model.vo.Piece;
 import com.phcarvalho.model.vo.Position;
+import com.phcarvalho.model.communication.protocol.vo.CommandTypeEnum;
+import com.phcarvalho.model.configuration.entity.Game;
 
 public class MovePieceCommand extends AbstractCommand {
 

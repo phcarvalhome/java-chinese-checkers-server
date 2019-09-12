@@ -1,8 +1,8 @@
 package com.phcarvalho.model.configuration.entity;
 
-import com.phcarvalho.model.configuration.startingposition.vo.StartingPositionEnum;
 import com.phcarvalho.model.vo.PieceColorEnum;
 import com.phcarvalho.model.vo.Player;
+import com.phcarvalho.model.configuration.startingposition.vo.StartingPositionEnum;
 
 import java.io.Serializable;
 import java.util.ArrayList;

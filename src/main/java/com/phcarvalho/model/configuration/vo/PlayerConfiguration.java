@@ -1,7 +1,7 @@
 package com.phcarvalho.model.configuration.vo;
 
-import com.phcarvalho.model.configuration.entity.User;
 import com.phcarvalho.model.vo.Player;
+import com.phcarvalho.model.configuration.entity.User;
 
 import java.util.Objects;
 

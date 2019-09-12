@@ -1,33 +1,33 @@
 package com.phcarvalho.model;
 
-import com.phcarvalho.controller.GameController;
-import com.phcarvalho.dependencyfactory.DependencyFactory;
-import com.phcarvalho.model.communication.commandtemplate.remote.IBoardRemoteCommandTemplate;
-import com.phcarvalho.model.communication.commandtemplate.remote.IMainRemoteCommandTemplate;
-import com.phcarvalho.model.communication.protocol.vo.command.MovePieceCommand;
-import com.phcarvalho.model.communication.protocol.vo.command.FlagAsReadyCommand;
-import com.phcarvalho.model.configuration.entity.Game;
+import com.phcarvalho.model.communication.commandtemplate.remote.adapter.BoardRemoteCommandTemplateAdapter;
+import com.phcarvalho.model.communication.commandtemplate.remote.adapter.MainRemoteCommandTemplateAdapter;
 import com.phcarvalho.model.communication.protocol.vo.command.AddGameCommand;
 import com.phcarvalho.model.communication.protocol.vo.command.AddPlayerCommand;
+import com.phcarvalho.model.communication.protocol.vo.command.FlagAsReadyCommand;
+import com.phcarvalho.model.communication.protocol.vo.command.MovePieceCommand;
 import com.phcarvalho.model.configuration.Configuration;
+import com.phcarvalho.model.configuration.entity.Game;
 import com.phcarvalho.model.configuration.entity.User;
-import com.phcarvalho.model.exception.ConnectionException;
 import com.phcarvalho.model.vo.Player;
+import com.phcarvalho.controller.GameController;
+import com.phcarvalho.dependencyfactory.DependencyFactory;
 
 import javax.swing.*;
+import java.rmi.RemoteException;
 import java.util.List;
 
 public class GameModel {
 
     private GameController controller;
-    private IMainRemoteCommandTemplate mainRemoteCommandTemplate;
-    private IBoardRemoteCommandTemplate boardRemoteCommandTemplate;
+    private MainRemoteCommandTemplateAdapter mainRemoteCommandTemplateAdapter;
+    private BoardRemoteCommandTemplateAdapter boardRemoteCommandTemplateAdapter;
     private DefaultListModel<Game> list;
 
     public GameModel(GameController controller) {
         this.controller = controller;
-        mainRemoteCommandTemplate = DependencyFactory.getSingleton().get(IMainRemoteCommandTemplate.class);
-        boardRemoteCommandTemplate = DependencyFactory.getSingleton().get(IBoardRemoteCommandTemplate.class);
+        mainRemoteCommandTemplateAdapter = DependencyFactory.getSingleton().get(MainRemoteCommandTemplateAdapter.class);
+        boardRemoteCommandTemplateAdapter = DependencyFactory.getSingleton().get(BoardRemoteCommandTemplateAdapter.class);
         list = new DefaultListModel();
     }
 
@@ -41,8 +41,8 @@ public class GameModel {
         remoteUserList.forEach(remoteUser -> {
 
             try {
-                mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser);
-            } catch (ConnectionException e) {
+                mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser);
+            } catch (RemoteException e) {
                 e.printStackTrace();
                 //TODO add handling...
             }
@@ -60,8 +60,8 @@ public class GameModel {
         AddGameCommand addGameCommand = new AddGameCommand(game, false);
 
         try {
-            mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser);
-        } catch (ConnectionException e) {
+            mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser);
+        } catch (RemoteException e) {
             e.printStackTrace();
             //TODO add handling...
         }
@@ -80,8 +80,8 @@ public class GameModel {
         remoteUserList.forEach(remoteUser -> {
 
             try {
-                mainRemoteCommandTemplate.addGame(addGameCommand, remoteUser);
-            } catch (ConnectionException e) {
+                mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser);
+            } catch (RemoteException e) {
                 e.printStackTrace();
                 //TODO add handling...
             }
@@ -100,8 +100,8 @@ public class GameModel {
         remoteUserList.forEach(remoteUser -> {
 
             try {
-                mainRemoteCommandTemplate.addPlayer(addPlayerCommand, remoteUser);
-            } catch (ConnectionException e) {
+                mainRemoteCommandTemplateAdapter.addPlayer(addPlayerCommand, remoteUser);
+            } catch (RemoteException e) {
                 e.printStackTrace();
                 //TODO add handling...
             }
@@ -122,9 +122,9 @@ public class GameModel {
         localGame.getRemoteUserList().forEach(remoteUser -> {
 
             try {
-                boardRemoteCommandTemplate
+                boardRemoteCommandTemplateAdapter
                         .movePiece(movePieceCommand, remoteUser);
-            } catch (ConnectionException e) {
+            } catch (RemoteException e) {
                 e.printStackTrace();
                 //TODO add handling...
             }
@@ -146,9 +146,9 @@ public class GameModel {
         remoteUserList.forEach(remoteUser -> {
 
             try {
-                mainRemoteCommandTemplate
+                mainRemoteCommandTemplateAdapter
                         .flagAsReady(new FlagAsReadyCommand(flagAsReadyCommand.getPlayer(), localGame), remoteUser);
-            } catch (ConnectionException e) {
+            } catch (RemoteException e) {
                 e.printStackTrace();
                 //TODO add handling...
             }

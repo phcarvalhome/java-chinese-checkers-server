@@ -1,26 +1,24 @@
 package com.phcarvalho.dependencyfactory;
 
 import com.phcarvalho.controller.ConnectedUserController;
+import com.phcarvalho.controller.ConnectionController;
 import com.phcarvalho.controller.GameController;
 import com.phcarvalho.controller.MainController;
-import com.phcarvalho.controller.ConnectionController;
 import com.phcarvalho.model.ConnectedUserModel;
+import com.phcarvalho.model.ConnectionModel;
 import com.phcarvalho.model.GameModel;
 import com.phcarvalho.model.MainModel;
-import com.phcarvalho.model.ConnectionModel;
 import com.phcarvalho.model.communication.commandtemplate.local.socket.CommandInvoker;
-import com.phcarvalho.model.communication.commandtemplate.remote.IBoardRemoteCommandTemplate;
-import com.phcarvalho.model.communication.commandtemplate.remote.IChatRemoteCommandTemplate;
-import com.phcarvalho.model.communication.commandtemplate.remote.IMainRemoteCommandTemplate;
-import com.phcarvalho.model.communication.commandtemplate.remote.socket.BoardRemoteCommandTemplate;
-import com.phcarvalho.model.communication.commandtemplate.remote.socket.ChatRemoteCommandTemplate;
-import com.phcarvalho.model.communication.commandtemplate.remote.socket.MainRemoteCommandTemplate;
-import com.phcarvalho.model.communication.connection.IConnectionHandlerStrategy;
-import com.phcarvalho.model.communication.connection.socket.SocketHandlerStrategy;
+import com.phcarvalho.model.communication.commandtemplate.remote.adapter.BoardRemoteCommandTemplateAdapter;
+import com.phcarvalho.model.communication.commandtemplate.remote.adapter.ChatRemoteCommandTemplateAdapter;
+import com.phcarvalho.model.communication.commandtemplate.remote.adapter.MainRemoteCommandTemplateAdapter;
+import com.phcarvalho.model.communication.strategy.ICommandTemplateStrategy;
+import com.phcarvalho.model.communication.strategy.IConnectionStrategy;
+import com.phcarvalho.model.communication.strategy.factory.ICommunicationStrategyFactory;
 import com.phcarvalho.view.ConnectedUserView;
+import com.phcarvalho.view.ConnectionView;
 import com.phcarvalho.view.GameView;
 import com.phcarvalho.view.MainView;
-import com.phcarvalho.view.ConnectionView;
 import com.phcarvalho.view.util.DialogUtil;
 
 import java.util.HashMap;
@@ -38,6 +36,7 @@ public class DependencyFactory {
         return singleton;
     }
 
+    private ICommunicationStrategyFactory communicationStrategyFactory;
     private Map<Class<?>, Object> dependencyMap;
 
     private DependencyFactory() {
@@ -46,12 +45,17 @@ public class DependencyFactory {
 
     public void build(){
         dependencyMap.put(DialogUtil.class, new DialogUtil());
-        dependencyMap.put(IConnectionHandlerStrategy.class, new SocketHandlerStrategy());
+        dependencyMap.put(IConnectionStrategy.class, communicationStrategyFactory.buildConnectionStrategy());
+        dependencyMap.put(ICommandTemplateStrategy.class, communicationStrategyFactory.buildCommandTemplateStrategy());
         dependencyMap.put(CommandInvoker.class, new CommandInvoker());
 
-        dependencyMap.put(IMainRemoteCommandTemplate.class, new MainRemoteCommandTemplate());
-        dependencyMap.put(IBoardRemoteCommandTemplate.class, new BoardRemoteCommandTemplate());
-        dependencyMap.put(IChatRemoteCommandTemplate.class, new ChatRemoteCommandTemplate());
+        dependencyMap.put(MainRemoteCommandTemplateAdapter.class, new MainRemoteCommandTemplateAdapter());
+        dependencyMap.put(BoardRemoteCommandTemplateAdapter.class, new BoardRemoteCommandTemplateAdapter());
+        dependencyMap.put(ChatRemoteCommandTemplateAdapter.class, new ChatRemoteCommandTemplateAdapter());
+
+//        dependencyMap.put(IBoardCommandTemplate.class, get(ICommandTemplateStrategy.class).getCommandTemplateSet().getBoardCommandTemplate());
+//        dependencyMap.put(IChatCommandTemplate.class, get(ICommandTemplateStrategy.class).getCommandTemplateSet().getChatCommandTemplate());
+//        dependencyMap.put(IMainCommandTemplate.class, get(ICommandTemplateStrategy.class).getCommandTemplateSet().getMainCommandTemplate());
 
         buildConnectedUserMVC();
         buildGameMVC();
@@ -108,7 +112,7 @@ public class DependencyFactory {
         dependencyMap.put(MainView.class, mainView);
         dependencyMap.put(MainModel.class, mainModel);
         get(DialogUtil.class).setMainView(mainView);
-        get(IConnectionHandlerStrategy.class).setMainModel(mainModel);
+        get(IConnectionStrategy.class).setMainModel(mainModel);
         //TODO talvez fazer o set de cada model que foi colocado lá...
     }
 
@@ -119,5 +123,9 @@ public class DependencyFactory {
             throw new RuntimeException("The dependency is null! Type: " + type);
 
         return (T) dependency;
+    }
+
+    public void setCommunicationStrategyFactory(ICommunicationStrategyFactory communicationStrategyFactory) {
+        this.communicationStrategyFactory = communicationStrategyFactory;
     }
 }

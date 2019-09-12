@@ -1,20 +1,21 @@
-package com.phcarvalho.model.communication.connection.socket;
+package com.phcarvalho.model.communication.strategy.socket;
 
+import com.phcarvalho.model.communication.protocol.vo.RemoteEvent;
+import com.phcarvalho.model.communication.protocol.vo.command.ICommand;
+import com.phcarvalho.model.exception.ConnectionException;
+import com.phcarvalho.model.util.LogUtil;
 import com.phcarvalho.dependencyfactory.DependencyFactory;
 import com.phcarvalho.model.ConnectedUserModel;
 import com.phcarvalho.model.GameModel;
 import com.phcarvalho.model.communication.commandtemplate.local.socket.CommandInvoker;
-import com.phcarvalho.model.communication.protocol.vo.RemoteEvent;
-import com.phcarvalho.model.communication.protocol.vo.command.ICommand;
 import com.phcarvalho.model.configuration.entity.User;
-import com.phcarvalho.model.exception.ConnectionException;
-import com.phcarvalho.model.util.LogUtil;
 import com.phcarvalho.view.util.DialogUtil;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.concurrent.Executors;
 
 public class RemoteUserSocket {
@@ -98,7 +99,7 @@ public class RemoteUserSocket {
         }
     }
 
-    public void send(ICommand remoteCommand) throws ConnectionException {
+    public void send(ICommand remoteCommand) throws RemoteException {
 
         if((socket == null) || (!socket.isConnected()))
 //            LogUtil.logError("The client is not connected! Client: " + remoteUser, CLIENT_CONNECTION);

@@ -1,8 +1,8 @@
 package com.phcarvalho.model.communication.protocol.vo.command;
 
+import com.phcarvalho.model.vo.Player;
 import com.phcarvalho.model.communication.protocol.vo.CommandTypeEnum;
 import com.phcarvalho.model.configuration.entity.Game;
-import com.phcarvalho.model.vo.Player;
 
 public class FlagAsReadyCommand extends AbstractCommand {
 

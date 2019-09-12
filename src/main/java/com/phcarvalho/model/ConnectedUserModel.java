@@ -1,8 +1,8 @@
 package com.phcarvalho.model;
 
-import com.phcarvalho.controller.ConnectedUserController;
 import com.phcarvalho.model.configuration.Configuration;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.controller.ConnectedUserController;
 
 import javax.swing.*;
 

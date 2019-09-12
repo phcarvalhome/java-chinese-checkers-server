@@ -1,23 +1,24 @@
-package com.phcarvalho.model.communication.connection.socket;
+package com.phcarvalho.model.communication.strategy.socket;
 
-import com.phcarvalho.dependencyfactory.DependencyFactory;
-import com.phcarvalho.model.MainModel;
-import com.phcarvalho.model.communication.connection.IConnectionHandlerStrategy;
 import com.phcarvalho.model.communication.protocol.vo.command.ICommand;
-import com.phcarvalho.model.configuration.entity.User;
 import com.phcarvalho.model.exception.ConnectionException;
 import com.phcarvalho.model.util.LogUtil;
+import com.phcarvalho.dependencyfactory.DependencyFactory;
+import com.phcarvalho.model.MainModel;
+import com.phcarvalho.model.communication.strategy.IConnectionStrategy;
+import com.phcarvalho.model.configuration.entity.User;
 import com.phcarvalho.view.util.DialogUtil;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-public class SocketHandlerStrategy implements IConnectionHandlerStrategy {
+public class SocketConnectionStrategy implements IConnectionStrategy {
 
     public static final String SERVER_CREATION = "Server Creation";
     public static final String CLIENT_CONNECTION = "Client Connection";
@@ -29,13 +30,13 @@ public class SocketHandlerStrategy implements IConnectionHandlerStrategy {
 
     private MainModel mainModel;
 
-    public SocketHandlerStrategy() {
+    public SocketConnectionStrategy() {
         remoteUserSocketMap = new HashMap<>();
         dialogUtil = DependencyFactory.getSingleton().get(DialogUtil.class);
     }
 
     @Override
-    public void startServer(Integer port) throws ConnectionException {
+    public void startServer(Integer port) throws RemoteException {
 
         if((serverSocket != null) && (!serverSocket.isClosed()))
             throw new ConnectionException("The server is already up!", SERVER_CREATION);
@@ -81,7 +82,7 @@ public class SocketHandlerStrategy implements IConnectionHandlerStrategy {
     }
 
     @Override
-    public void send(ICommand remoteCommand, User remoteUser) throws ConnectionException {
+    public void send(ICommand remoteCommand, User remoteUser) throws RemoteException {
         RemoteUserSocket remoteUserSocket = remoteUserSocketMap.get(remoteUser);
 
         if(remoteUserSocket.getSocket().isConnected())
@@ -89,7 +90,7 @@ public class SocketHandlerStrategy implements IConnectionHandlerStrategy {
     }
 
     @Override
-    public void forward(List<User> remoteUserList, ICommand command) throws ConnectionException {
+    public void forward(List<User> remoteUserList, ICommand command) throws RemoteException {
 
         for (User remoteUser : remoteUserList)
             send(command, remoteUser);

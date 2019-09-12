@@ -1,23 +1,24 @@
 package com.phcarvalho.model;
 
-import com.phcarvalho.controller.ConnectionController;
-import com.phcarvalho.dependencyfactory.DependencyFactory;
-import com.phcarvalho.model.communication.connection.IConnectionHandlerStrategy;
+import com.phcarvalho.model.communication.strategy.IConnectionStrategy;
 import com.phcarvalho.model.configuration.Configuration;
 import com.phcarvalho.model.configuration.entity.User;
-import com.phcarvalho.model.exception.ConnectionException;
+import com.phcarvalho.controller.ConnectionController;
+import com.phcarvalho.dependencyfactory.DependencyFactory;
+
+import java.rmi.RemoteException;
 
 public class ConnectionModel {
 
     private ConnectionController controller;
-    private IConnectionHandlerStrategy connectionHandlerStrategy;
+    private IConnectionStrategy connectionHandlerStrategy;
 
     public ConnectionModel(ConnectionController controller) {
         this.controller = controller;
-        connectionHandlerStrategy = DependencyFactory.getSingleton().get(IConnectionHandlerStrategy.class);
+        connectionHandlerStrategy = DependencyFactory.getSingleton().get(IConnectionStrategy.class);
     }
 
-    public void startServer(Integer port) throws ConnectionException {
+    public void startServer(Integer port) throws RemoteException {
         connectionHandlerStrategy.startServer(port);
     }
 
