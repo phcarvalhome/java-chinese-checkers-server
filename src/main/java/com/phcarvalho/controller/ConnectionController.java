@@ -14,12 +14,8 @@ public class ConnectionController {
     public ConnectionController() {
     }
 
-    public void startServer(Integer port) throws RemoteException {
-        model.startServer(port);
-    }
-
-    public void startServerByCallback(User localUser) {
-        view.startServerByCallback(localUser);
+    public void startServer(User localUser) throws RemoteException {
+        model.startServer(localUser);
     }
 
     public void setView(ConnectionView view) {

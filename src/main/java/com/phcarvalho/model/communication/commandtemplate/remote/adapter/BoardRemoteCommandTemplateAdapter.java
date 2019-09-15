@@ -1,38 +1,60 @@
 package com.phcarvalho.model.communication.commandtemplate.remote.adapter;
 
+import com.phcarvalho.dependencyfactory.DependencyFactory;
+import com.phcarvalho.model.communication.commandtemplate.IBoardCommandTemplate;
 import com.phcarvalho.model.communication.protocol.vo.command.MovePieceCommand;
 import com.phcarvalho.model.communication.protocol.vo.command.NotifyVictoryCommand;
 import com.phcarvalho.model.communication.protocol.vo.command.NotifyWithdrawalCommand;
-import com.phcarvalho.model.communication.strategy.ICommandTemplateStrategy;
-import com.phcarvalho.model.communication.strategy.vo.CommandTemplateSet;
-import com.phcarvalho.dependencyfactory.DependencyFactory;
+import com.phcarvalho.model.communication.strategy.ICommandTemplateFactory;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.model.util.LogUtil;
 
 import java.rmi.RemoteException;
 
-public class BoardRemoteCommandTemplateAdapter {
+public class BoardRemoteCommandTemplateAdapter extends AbstractCommandTemplateAdapter<IBoardCommandTemplate>
+        implements IBoardCommandTemplateAdapter {
 
-    private ICommandTemplateStrategy commandTemplateStrategy;
+    private static final String BOARD_REMOTE_COMMAND = "Board Remote Command";
+
+    private ICommandTemplateFactory commandTemplateFactory;
 
     public BoardRemoteCommandTemplateAdapter() {
-        commandTemplateStrategy = DependencyFactory.getSingleton().get(ICommandTemplateStrategy.class);
+        super();
+        commandTemplateFactory = DependencyFactory.getSingleton().get(ICommandTemplateFactory.class);
     }
 
-    public void notifyVictory(NotifyVictoryCommand notifyVictoryCommand, User remoteUser) throws RemoteException {
-        CommandTemplateSet commandTemplateSet = commandTemplateStrategy.getCommandTemplateSet(remoteUser);
-
-        commandTemplateSet.getBoardCommandTemplate().notifyVictory(notifyVictoryCommand);
+    @Override
+    protected IBoardCommandTemplate buildCommandTemplate(User remoteUser) {
+        return commandTemplateFactory.buildBoard(remoteUser);
     }
 
-    public void notifyWithdrawal(NotifyWithdrawalCommand notifyWithdrawalCommand, User remoteUser) throws RemoteException {
-        CommandTemplateSet commandTemplateSet = commandTemplateStrategy.getCommandTemplateSet(remoteUser);
+    public void notifyVictory(NotifyVictoryCommand notifyVictoryCommand, User remoteUser) {
 
-        commandTemplateSet.getBoardCommandTemplate().notifyWithdrawal(notifyWithdrawalCommand);
+        try {
+            get(remoteUser).notifyVictory(notifyVictoryCommand);
+        } catch (RemoteException e) {
+            LogUtil.logError("Error in the notify victory command remote invocation!",
+                    BOARD_REMOTE_COMMAND, e);
+        }
     }
 
-    public void movePiece(MovePieceCommand movePieceCommand, User remoteUser) throws RemoteException {
-        CommandTemplateSet commandTemplateSet = commandTemplateStrategy.getCommandTemplateSet(remoteUser);
+    public void notifyWithdrawal(NotifyWithdrawalCommand notifyWithdrawalCommand, User remoteUser) {
 
-        commandTemplateSet.getBoardCommandTemplate().movePiece(movePieceCommand);
+        try {
+            get(remoteUser).notifyWithdrawal(notifyWithdrawalCommand);
+        } catch (RemoteException e) {
+            LogUtil.logError("Error in the notify withdrawal command remote invocation!",
+                    BOARD_REMOTE_COMMAND, e);
+        }
+    }
+
+    public void movePiece(MovePieceCommand movePieceCommand, User remoteUser) {
+
+        try {
+            get(remoteUser).movePiece(movePieceCommand);
+        } catch (RemoteException e) {
+            LogUtil.logError("Error in the move piece command remote invocation!",
+                    BOARD_REMOTE_COMMAND, e);
+        }
     }
 }

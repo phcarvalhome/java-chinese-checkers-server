@@ -1,24 +1,38 @@
 package com.phcarvalho.model.communication.commandtemplate.remote.adapter;
 
-import com.phcarvalho.model.communication.protocol.vo.command.SendMessageCommand;
-import com.phcarvalho.model.communication.strategy.ICommandTemplateStrategy;
-import com.phcarvalho.model.communication.strategy.vo.CommandTemplateSet;
 import com.phcarvalho.dependencyfactory.DependencyFactory;
+import com.phcarvalho.model.communication.commandtemplate.IChatCommandTemplate;
+import com.phcarvalho.model.communication.protocol.vo.command.SendMessageCommand;
+import com.phcarvalho.model.communication.strategy.ICommandTemplateFactory;
 import com.phcarvalho.model.configuration.entity.User;
+import com.phcarvalho.model.util.LogUtil;
 
 import java.rmi.RemoteException;
 
-public class ChatRemoteCommandTemplateAdapter {
+public class ChatRemoteCommandTemplateAdapter extends AbstractCommandTemplateAdapter<IChatCommandTemplate>
+        implements IChatCommandTemplateAdapter {
 
-    private ICommandTemplateStrategy commandTemplateStrategy;
+    private static final String CHAT_REMOTE_COMMAND = "Chat Remote Command";
+
+    private ICommandTemplateFactory commandTemplateFactory;
 
     public ChatRemoteCommandTemplateAdapter() {
-        commandTemplateStrategy = DependencyFactory.getSingleton().get(ICommandTemplateStrategy.class);
+        super();
+        commandTemplateFactory = DependencyFactory.getSingleton().get(ICommandTemplateFactory.class);
     }
 
-    public void sendMessage(SendMessageCommand sendMessageCommand, User remoteUser) throws RemoteException {
-        CommandTemplateSet commandTemplateSet = commandTemplateStrategy.getCommandTemplateSet(remoteUser);
+    @Override
+    protected IChatCommandTemplate buildCommandTemplate(User remoteUser) {
+        return commandTemplateFactory.buildChat(remoteUser);
+    }
 
-        commandTemplateSet.getChatCommandTemplate().sendMessage(sendMessageCommand);
+    public void sendMessage(SendMessageCommand sendMessageCommand, User remoteUser) {
+
+        try {
+            get(remoteUser).sendMessage(sendMessageCommand);
+        } catch (RemoteException e) {
+            LogUtil.logError("Error in the send message command remote invocation!",
+                    CHAT_REMOTE_COMMAND, e);
+        }
     }
 }

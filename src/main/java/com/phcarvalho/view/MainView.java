@@ -65,28 +65,4 @@ public class MainView extends JFrame {
         setVisible(true);
         setResizable(false);
     }
-
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
-
-    public JPanel getTopPanel() {
-        return topPanel;
-    }
-
-    public JPanel getBottomPanel() {
-        return bottomPanel;
-    }
-
-    public ConnectedUserView getConnectedUserView() {
-        return connectedUserView;
-    }
-
-    public GameView getGameView() {
-        return gameView;
-    }
-
-    public ConnectionView getConnectionView() {
-        return connectionView;
-    }
 }

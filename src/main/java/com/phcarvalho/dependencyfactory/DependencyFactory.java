@@ -11,10 +11,12 @@ import com.phcarvalho.model.MainModel;
 import com.phcarvalho.model.communication.commandtemplate.local.socket.CommandInvoker;
 import com.phcarvalho.model.communication.commandtemplate.remote.adapter.BoardRemoteCommandTemplateAdapter;
 import com.phcarvalho.model.communication.commandtemplate.remote.adapter.ChatRemoteCommandTemplateAdapter;
+import com.phcarvalho.model.communication.commandtemplate.remote.adapter.ConnectionRemoteCommandTemplateAdapter;
 import com.phcarvalho.model.communication.commandtemplate.remote.adapter.MainRemoteCommandTemplateAdapter;
-import com.phcarvalho.model.communication.strategy.ICommandTemplateStrategy;
+import com.phcarvalho.model.communication.strategy.ICommandTemplateFactory;
 import com.phcarvalho.model.communication.strategy.IConnectionStrategy;
-import com.phcarvalho.model.communication.strategy.factory.ICommunicationStrategyFactory;
+import com.phcarvalho.model.communication.strategy.factory.ICommunicationStrategy;
+import com.phcarvalho.model.communication.strategy.socket.SocketConnectionStrategy;
 import com.phcarvalho.view.ConnectedUserView;
 import com.phcarvalho.view.ConnectionView;
 import com.phcarvalho.view.GameView;
@@ -36,7 +38,7 @@ public class DependencyFactory {
         return singleton;
     }
 
-    private ICommunicationStrategyFactory communicationStrategyFactory;
+    private ICommunicationStrategy communicationStrategyFactory;
     private Map<Class<?>, Object> dependencyMap;
 
     private DependencyFactory() {
@@ -45,17 +47,15 @@ public class DependencyFactory {
 
     public void build(){
         dependencyMap.put(DialogUtil.class, new DialogUtil());
+        dependencyMap.put(SocketConnectionStrategy.class, new SocketConnectionStrategy());
         dependencyMap.put(IConnectionStrategy.class, communicationStrategyFactory.buildConnectionStrategy());
-        dependencyMap.put(ICommandTemplateStrategy.class, communicationStrategyFactory.buildCommandTemplateStrategy());
+        dependencyMap.put(ICommandTemplateFactory.class, communicationStrategyFactory.buildCommandTemplateStrategy());
         dependencyMap.put(CommandInvoker.class, new CommandInvoker());
 
+        dependencyMap.put(ConnectionRemoteCommandTemplateAdapter.class, new ConnectionRemoteCommandTemplateAdapter());
         dependencyMap.put(MainRemoteCommandTemplateAdapter.class, new MainRemoteCommandTemplateAdapter());
         dependencyMap.put(BoardRemoteCommandTemplateAdapter.class, new BoardRemoteCommandTemplateAdapter());
         dependencyMap.put(ChatRemoteCommandTemplateAdapter.class, new ChatRemoteCommandTemplateAdapter());
-
-//        dependencyMap.put(IBoardCommandTemplate.class, get(ICommandTemplateStrategy.class).getCommandTemplateSet().getBoardCommandTemplate());
-//        dependencyMap.put(IChatCommandTemplate.class, get(ICommandTemplateStrategy.class).getCommandTemplateSet().getChatCommandTemplate());
-//        dependencyMap.put(IMainCommandTemplate.class, get(ICommandTemplateStrategy.class).getCommandTemplateSet().getMainCommandTemplate());
 
         buildConnectedUserMVC();
         buildGameMVC();
@@ -112,20 +112,20 @@ public class DependencyFactory {
         dependencyMap.put(MainView.class, mainView);
         dependencyMap.put(MainModel.class, mainModel);
         get(DialogUtil.class).setMainView(mainView);
-        get(IConnectionStrategy.class).setMainModel(mainModel);
+//        get(IConnectionStrategy.class).setMainModel(mainModel);
         //TODO talvez fazer o set de cada model que foi colocado lá...
     }
 
-    public <T> T get(Class<T> type){
-        Object dependency = dependencyMap.get(type);
+    public <T> T get(Class<T> classType){
+        Object dependency = dependencyMap.get(classType);
 
         if(dependency == null)
-            throw new RuntimeException("The dependency is null! Type: " + type);
+            throw new RuntimeException("The dependency is null! Type: " + classType);
 
         return (T) dependency;
     }
 
-    public void setCommunicationStrategyFactory(ICommunicationStrategyFactory communicationStrategyFactory) {
+    public void setCommunicationStrategyFactory(ICommunicationStrategy communicationStrategyFactory) {
         this.communicationStrategyFactory = communicationStrategyFactory;
     }
 }

@@ -18,7 +18,7 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.concurrent.Executors;
 
-public class RemoteUserSocket {
+public class RemoteUserSocketConnectionHelper {
 
     public static final String CLIENT_CONNECTION = "Client Connection";
     public static final String RECEIVE_REMOTE_COMMAND = "Receive Remote Command";
@@ -36,25 +36,25 @@ public class RemoteUserSocket {
 
     private DialogUtil dialogUtil;
 
-    private ConnectedUserModel connectedUserModel;
-    private GameModel gameModel;
+//    private ConnectedUserModel connectedUserModel;
+//    private GameModel gameModel;
 
-    public RemoteUserSocket(Socket socket) throws IOException {
+    public RemoteUserSocketConnectionHelper(Socket socket) throws IOException {
         this.socket = socket;
         commandInvoker = DependencyFactory.getSingleton().get(CommandInvoker.class);
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectInputStream = new ObjectInputStream(socket.getInputStream());
         dialogUtil = DependencyFactory.getSingleton().get(DialogUtil.class);
-        connectedUserModel = DependencyFactory.getSingleton().get(ConnectedUserModel.class);
-        gameModel = DependencyFactory.getSingleton().get(GameModel.class);
-        setRemoteUser();
+//        connectedUserModel = DependencyFactory.getSingleton().get(ConnectedUserModel.class);
+//        gameModel = DependencyFactory.getSingleton().get(GameModel.class);
+        remoteUser = User.of(socket.getInetAddress().getHostName(), socket.getPort());
+//        setRemoteUser();
         waitRemoteEvent();
     }
 
-    private void setRemoteUser() {
-        remoteUser = User.of(socket.getInetAddress().getHostName(), socket.getPort());
-        connectedUserModel.add(remoteUser);
-    }
+//    private void setRemoteUser() {
+//        connectedUserModel.add(remoteUser);
+//    }
 
     private void waitRemoteEvent() {
 
@@ -68,8 +68,8 @@ public class RemoteUserSocket {
                     commandInvoker.execute(remoteEvent);
                 } catch (IOException | ClassNotFoundException e) {
                     LogUtil.logError("Error in the remote command receiving! Client: " + remoteUser, RECEIVE_REMOTE_COMMAND, e);
-                    connectedUserModel.remove(remoteUser);
-                    gameModel.remove(remoteUser);
+//                    connectedUserModel.remove(remoteUser); //TODO dar o clear em um erro quando tentar se conectar, mas em um canto generico...
+//                    gameModel.remove(remoteUser);
                     closeResources();
 
                     return;

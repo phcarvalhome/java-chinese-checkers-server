@@ -2,10 +2,7 @@ package com.phcarvalho.model;
 
 import com.phcarvalho.model.communication.commandtemplate.remote.adapter.BoardRemoteCommandTemplateAdapter;
 import com.phcarvalho.model.communication.commandtemplate.remote.adapter.MainRemoteCommandTemplateAdapter;
-import com.phcarvalho.model.communication.protocol.vo.command.AddGameCommand;
-import com.phcarvalho.model.communication.protocol.vo.command.AddPlayerCommand;
-import com.phcarvalho.model.communication.protocol.vo.command.FlagAsReadyCommand;
-import com.phcarvalho.model.communication.protocol.vo.command.MovePieceCommand;
+import com.phcarvalho.model.communication.protocol.vo.command.*;
 import com.phcarvalho.model.configuration.Configuration;
 import com.phcarvalho.model.configuration.entity.Game;
 import com.phcarvalho.model.configuration.entity.User;
@@ -38,34 +35,28 @@ public class GameModel {
 
         List<User> remoteUserList = Configuration.getSingleton().getRemoteUserList();
 
-        remoteUserList.forEach(remoteUser -> {
-
-            try {
-                mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                //TODO add handling...
-            }
-        });
+        remoteUserList.forEach(remoteUser -> mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser));
         controller.add(remoteGame);
         list.addElement(remoteGame);
     }
 
-    public void sendAll(User remoteUser) {
-        Configuration.getSingleton().getGameMap().values()
-                .forEach(gameConfiguration -> sendAll(remoteUser, gameConfiguration));
-    }
-
-    private void sendAll(User remoteUser, Game game) {
-        AddGameCommand addGameCommand = new AddGameCommand(game, false);
-
-        try {
-            mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            //TODO add handling...
-        }
-    }
+    //TODO isso aqui nao é do select/add player?
+//    public void connect(ConnectCommand connectCommand) {
+//        User remoteUser = connectCommand.getSourceUser();
+//        Configuration.getSingleton().getGameMap().values()
+//                .forEach(game -> connect(remoteUser, game));
+//    }
+//
+//    private void connect(User remoteUser, Game game) {
+//        AddGameCommand addGameCommand = new AddGameCommand(game, false);
+//
+//        try {
+//            mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//            //TODO add handling...
+//        }
+//    }
 
     public void remove(User user) {
         List<Game> gameList = Configuration.getSingleton().removeGame(user);
@@ -77,15 +68,7 @@ public class GameModel {
         AddGameCommand addGameCommand = new AddGameCommand(game, true);
         List<User> remoteUserList = Configuration.getSingleton().getRemoteUserList();
 
-        remoteUserList.forEach(remoteUser -> {
-
-            try {
-                mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                //TODO add handling...
-            }
-        });
+        remoteUserList.forEach(remoteUser -> mainRemoteCommandTemplateAdapter.addGame(addGameCommand, remoteUser));
         list.removeElement(game);
     }
 
@@ -97,15 +80,7 @@ public class GameModel {
         localGame.addPlayer(addPlayerCommand.getPlayer());
         remoteGame.getPlayerList().clear();
         remoteGame.getPlayerList().addAll(localGame.getPlayerList());
-        remoteUserList.forEach(remoteUser -> {
-
-            try {
-                mainRemoteCommandTemplateAdapter.addPlayer(addPlayerCommand, remoteUser);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                //TODO add handling...
-            }
-        });
+        remoteUserList.forEach(remoteUser -> mainRemoteCommandTemplateAdapter.addPlayer(addPlayerCommand, remoteUser));
     }
 
     public void movePiece(MovePieceCommand movePieceCommand) {
@@ -119,16 +94,8 @@ public class GameModel {
 
         remoteGame.setTurnPlayer(nextTurnPlayer);
         localGame.setTurnPlayer(nextTurnPlayer);
-        localGame.getRemoteUserList().forEach(remoteUser -> {
-
-            try {
-                boardRemoteCommandTemplateAdapter
-                        .movePiece(movePieceCommand, remoteUser);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                //TODO add handling...
-            }
-        });
+        localGame.getRemoteUserList().forEach(remoteUser -> boardRemoteCommandTemplateAdapter
+                .movePiece(movePieceCommand, remoteUser));
     }
 
     public void flagAsReady(FlagAsReadyCommand flagAsReadyCommand) {
@@ -143,16 +110,8 @@ public class GameModel {
         else
             remoteUserList = localGame.getRemoteUserList();
 
-        remoteUserList.forEach(remoteUser -> {
-
-            try {
-                mainRemoteCommandTemplateAdapter
-                        .flagAsReady(new FlagAsReadyCommand(flagAsReadyCommand.getPlayer(), localGame), remoteUser);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                //TODO add handling...
-            }
-        });
+        remoteUserList.forEach(remoteUser -> mainRemoteCommandTemplateAdapter
+                .flagAsReady(new FlagAsReadyCommand(flagAsReadyCommand.getPlayer(), localGame), remoteUser));
     }
 
     public DefaultListModel<Game> getList() {

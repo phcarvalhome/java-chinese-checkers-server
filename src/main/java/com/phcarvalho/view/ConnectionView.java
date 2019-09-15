@@ -8,6 +8,8 @@ import com.phcarvalho.view.util.DialogUtil;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 
 public class ConnectionView extends JPanel {
@@ -82,7 +84,12 @@ public class ConnectionView extends JPanel {
         if(port != null) {
 
             try {
-                controller.startServer(port);
+                User localUser = buildLocalUser(port);
+
+                controller.startServer(localUser);
+                serverStatusValueLabel.setText("Up");
+                localPortValueLabel.setText(localUser.getPort().toString());
+                startServerButton.setEnabled(false);
             } catch (RemoteException e) {
                 dialogUtil.showError(e.getMessage(), START_SERVER, e);
             }
@@ -107,29 +114,22 @@ public class ConnectionView extends JPanel {
         return getPort();
     }
 
-    public void startServerByCallback(User localUser) {
-        serverStatusValueLabel.setText("Up");
-        localPortValueLabel.setText(localUser.getPort().toString());
-        startServerButton.setEnabled(false);
+    private User buildLocalUser(Integer port) {
+        String host = getLocalhost();
+
+        return User.ofServer(host, port);
     }
 
-    public JButton getStartServerButton() {
-        return startServerButton;
-    }
+    private String getLocalhost() {
+        InetAddress inetAddress = null;
 
-    public JLabel getServerStatusLabel() {
-        return serverStatusLabel;
-    }
+        try {
+            inetAddress = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            //todo handle it...
+            e.printStackTrace();
+        }
 
-    public JLabel getServerStatusValueLabel() {
-        return serverStatusValueLabel;
-    }
-
-    public JLabel getLocalPortLabel() {
-        return localPortLabel;
-    }
-
-    public JLabel getLocalPortValueLabel() {
-        return localPortValueLabel;
+        return inetAddress.getHostAddress();
     }
 }

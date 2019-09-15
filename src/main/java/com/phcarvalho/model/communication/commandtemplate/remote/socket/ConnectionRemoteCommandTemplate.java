@@ -1,34 +1,34 @@
 package com.phcarvalho.model.communication.commandtemplate.remote.socket;
 
-import com.phcarvalho.model.communication.protocol.vo.command.SendMessageCommand;
 import com.phcarvalho.dependencyfactory.DependencyFactory;
-import com.phcarvalho.model.communication.commandtemplate.IChatCommandTemplate;
+import com.phcarvalho.model.communication.commandtemplate.IConnectionCommandTemplate;
+import com.phcarvalho.model.communication.protocol.vo.command.ConnectCommand;
 import com.phcarvalho.model.communication.strategy.socket.SocketConnectionStrategy;
 import com.phcarvalho.model.configuration.entity.User;
 
 import java.rmi.RemoteException;
 import java.util.Objects;
 
-public class ChatRemoteCommandTemplate implements IChatCommandTemplate {
+public class ConnectionRemoteCommandTemplate implements IConnectionCommandTemplate {
 
     private User remoteUser;
     private SocketConnectionStrategy socketConnectionStrategy;
 
-    public ChatRemoteCommandTemplate(User remoteUser) {
+    public ConnectionRemoteCommandTemplate(User remoteUser) {
         this.remoteUser = remoteUser;
         socketConnectionStrategy = DependencyFactory.getSingleton().get(SocketConnectionStrategy.class);
     }
 
     @Override
-    public void sendMessage(SendMessageCommand sendMessageCommand) throws RemoteException {
-        socketConnectionStrategy.send(sendMessageCommand, remoteUser);
+    public void connect(ConnectCommand connectCommand) throws RemoteException {
+        socketConnectionStrategy.send(connectCommand, remoteUser);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChatRemoteCommandTemplate that = (ChatRemoteCommandTemplate) o;
+        ConnectionRemoteCommandTemplate that = (ConnectionRemoteCommandTemplate) o;
         return Objects.equals(remoteUser, that.remoteUser);
     }
 
