@@ -47,6 +47,10 @@ public class ConnectedUserView extends JPanel {
 
     }
 
+    public void remove(User user) {
+
+    }
+
     public JList getList() {
         return list;
     }

@@ -3,6 +3,7 @@ package com.phcarvalho.model.communication.commandtemplate.remote.adapter;
 import com.phcarvalho.dependencyfactory.DependencyFactory;
 import com.phcarvalho.model.communication.commandtemplate.IConnectionCommandTemplate;
 import com.phcarvalho.model.communication.protocol.vo.command.ConnectCommand;
+import com.phcarvalho.model.communication.protocol.vo.command.DisconnectCommand;
 import com.phcarvalho.model.communication.strategy.ICommandTemplateFactory;
 import com.phcarvalho.model.configuration.entity.User;
 import com.phcarvalho.model.util.LogUtil;
@@ -33,6 +34,16 @@ public class ConnectionRemoteCommandTemplateAdapter extends AbstractCommandTempl
             get(remoteUser).connect(connectCommand);
         } catch (RemoteException e) {
             LogUtil.logError("Error in the connect command remote invocation!", CONNECTION_REMOTE_COMMAND, e);
+        }
+    }
+
+    @Override
+    public void disconnect(DisconnectCommand disconnectCommand, User remoteUser) {
+
+        try {
+            get(remoteUser).disconnect(disconnectCommand);
+        } catch (RemoteException e) {
+            LogUtil.logError("Error in the disconnect command remote invocation!", CONNECTION_REMOTE_COMMAND, e);
         }
     }
 }

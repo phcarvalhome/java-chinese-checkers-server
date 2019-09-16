@@ -51,19 +51,12 @@ public class Configuration {
         gameMap.put(game.getId(), game);
     }
 
-    public Game getGame(Integer gameId){
-        return gameMap.get(gameId);
+    public void removeGame(Integer gameId){
+        gameMap.remove(gameId);
     }
 
-    public List<Game> removeGame(User ownerUser){
-        List<Game> gameList = gameMap.values()
-                .stream()
-                .filter(game -> game.getOwnerPlayer().getUser().equals(ownerUser))
-                .collect(Collectors.toList());
-
-        gameList.forEach(game -> gameMap.remove(game.getId()));
-
-        return gameList;
+    public Game getGame(Integer gameId){
+        return gameMap.get(gameId);
     }
 
     public void clearGameConfigurationMap(){

@@ -1,14 +1,12 @@
 package com.phcarvalho.model.communication.strategy.socket;
 
+import com.phcarvalho.dependencyfactory.DependencyFactory;
+import com.phcarvalho.model.communication.commandtemplate.local.socket.CommandInvoker;
 import com.phcarvalho.model.communication.protocol.vo.RemoteEvent;
 import com.phcarvalho.model.communication.protocol.vo.command.ICommand;
+import com.phcarvalho.model.configuration.entity.User;
 import com.phcarvalho.model.exception.ConnectionException;
 import com.phcarvalho.model.util.LogUtil;
-import com.phcarvalho.dependencyfactory.DependencyFactory;
-import com.phcarvalho.model.ConnectedUserModel;
-import com.phcarvalho.model.GameModel;
-import com.phcarvalho.model.communication.commandtemplate.local.socket.CommandInvoker;
-import com.phcarvalho.model.configuration.entity.User;
 import com.phcarvalho.view.util.DialogUtil;
 
 import java.io.IOException;
@@ -18,7 +16,7 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.concurrent.Executors;
 
-public class RemoteUserSocketConnectionHelper {
+public class RemoteUserSocketConnection {
 
     public static final String CLIENT_CONNECTION = "Client Connection";
     public static final String RECEIVE_REMOTE_COMMAND = "Receive Remote Command";
@@ -36,25 +34,15 @@ public class RemoteUserSocketConnectionHelper {
 
     private DialogUtil dialogUtil;
 
-//    private ConnectedUserModel connectedUserModel;
-//    private GameModel gameModel;
-
-    public RemoteUserSocketConnectionHelper(Socket socket) throws IOException {
+    public RemoteUserSocketConnection(Socket socket) throws IOException {
         this.socket = socket;
         commandInvoker = DependencyFactory.getSingleton().get(CommandInvoker.class);
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectInputStream = new ObjectInputStream(socket.getInputStream());
         dialogUtil = DependencyFactory.getSingleton().get(DialogUtil.class);
-//        connectedUserModel = DependencyFactory.getSingleton().get(ConnectedUserModel.class);
-//        gameModel = DependencyFactory.getSingleton().get(GameModel.class);
         remoteUser = User.of(socket.getInetAddress().getHostName(), socket.getPort());
-//        setRemoteUser();
         waitRemoteEvent();
     }
-
-//    private void setRemoteUser() {
-//        connectedUserModel.add(remoteUser);
-//    }
 
     private void waitRemoteEvent() {
 
@@ -69,7 +57,7 @@ public class RemoteUserSocketConnectionHelper {
                 } catch (IOException | ClassNotFoundException e) {
                     LogUtil.logError("Error in the remote command receiving! Client: " + remoteUser, RECEIVE_REMOTE_COMMAND, e);
 //                    connectedUserModel.remove(remoteUser); //TODO dar o clear em um erro quando tentar se conectar, mas em um canto generico...
-//                    gameModel.remove(remoteUser);
+//                    gameModel.remove(remoteUser); //TODO dar o clear em um erro quando tentar se conectar, mas em um canto generico...
                     closeResources();
 
                     return;
@@ -102,7 +90,6 @@ public class RemoteUserSocketConnectionHelper {
     public void send(ICommand remoteCommand) throws RemoteException {
 
         if((socket == null) || (!socket.isConnected()))
-//            LogUtil.logError("The client is not connected! Client: " + remoteUser, CLIENT_CONNECTION);
             throw new ConnectionException("The client is not connected! Client: " + remoteUser, CLIENT_CONNECTION);
 
         try {
@@ -112,7 +99,6 @@ public class RemoteUserSocketConnectionHelper {
             objectOutputStream.reset();
             LogUtil.logInformation(remoteEvent.toString(), REMOTE_EVENT_SENT);
         } catch (IOException e) {
-//            LogUtil.logError("Error in the output stream processing! Client: " + remoteUser, OUTPUT_STREAM_PROCESSING, e);
             closeResources();
 
             throw new ConnectionException("Error in the remote command sending! Client: " + remoteUser, e, SEND_REMOTE_COMMAND);

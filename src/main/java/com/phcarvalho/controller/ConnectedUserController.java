@@ -20,6 +20,10 @@ public class ConnectedUserController {
         view.add(user);
     }
 
+    public void remove(User user) {
+        view.remove(user);
+    }
+
     public void setView(ConnectedUserView view) {
         this.view = view;
     }

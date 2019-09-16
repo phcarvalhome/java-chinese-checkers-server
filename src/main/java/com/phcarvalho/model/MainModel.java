@@ -7,8 +7,6 @@ import com.phcarvalho.model.communication.protocol.vo.command.SendMessageCommand
 import com.phcarvalho.model.configuration.Configuration;
 import com.phcarvalho.model.configuration.entity.Game;
 
-import java.rmi.RemoteException;
-
 public class MainModel {
 
     private MainController controller;

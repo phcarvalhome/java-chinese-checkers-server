@@ -13,7 +13,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
@@ -23,7 +22,7 @@ public class SocketConnectionStrategy implements IConnectionStrategy {
     public static final String CLIENT_CONNECTION = "Client Connection";
 
     private ServerSocket serverSocket;
-    private Map<User, RemoteUserSocketConnectionHelper> remoteUserSocketMap;
+    private Map<User, RemoteUserSocketConnection> remoteUserSocketMap;
 
     private DialogUtil dialogUtil;
 
@@ -65,15 +64,15 @@ public class SocketConnectionStrategy implements IConnectionStrategy {
     }
 
     private void addRemoteUserSocket(Socket socket) throws IOException {
-        RemoteUserSocketConnectionHelper remoteUserSocketConnectionHelper = new RemoteUserSocketConnectionHelper(socket);
+        RemoteUserSocketConnection remoteUserSocketConnection = new RemoteUserSocketConnection(socket);
 
-        remoteUserSocketMap.put(remoteUserSocketConnectionHelper.getRemoteUser(), remoteUserSocketConnectionHelper);
+        remoteUserSocketMap.put(remoteUserSocketConnection.getRemoteUser(), remoteUserSocketConnection);
     }
 
     public void send(ICommand remoteCommand, User remoteUser) throws RemoteException {
-        RemoteUserSocketConnectionHelper remoteUserSocketConnectionHelper = remoteUserSocketMap.get(remoteUser);
+        RemoteUserSocketConnection remoteUserSocketConnection = remoteUserSocketMap.get(remoteUser);
 
-        if(remoteUserSocketConnectionHelper.getSocket().isConnected())
-            remoteUserSocketConnectionHelper.send(remoteCommand);
+        if(remoteUserSocketConnection.getSocket().isConnected())
+            remoteUserSocketConnection.send(remoteCommand);
     }
 }

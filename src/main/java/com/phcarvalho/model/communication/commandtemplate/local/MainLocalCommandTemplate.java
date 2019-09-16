@@ -24,7 +24,7 @@ public class MainLocalCommandTemplate extends UnicastRemoteObject implements IMa
     }
 
     public void addPlayer(AddPlayerCommand addPlayerCommand) {
-        gameModel.addPlayer(addPlayerCommand);
+        gameModel.addOrRemovePlayer(addPlayerCommand);
     }
 
     public void flagAsReady(FlagAsReadyCommand flagAsReadyCommand) {
