@@ -20,11 +20,11 @@ public class BoardLocalCommandTemplate extends UnicastRemoteObject implements IB
     }
 
     public void notifyVictory(NotifyVictoryCommand notifyVictoryCommand){
-
+        gameModel.notifyVictory(notifyVictoryCommand);
     }
 
     public void notifyWithdrawal(NotifyWithdrawalCommand notifyWithdrawalCommand){
-
+        gameModel.notifyWithdrawal(notifyWithdrawalCommand);
     }
 
     public void movePiece(MovePieceCommand movePieceCommand){

@@ -55,11 +55,20 @@ public class GameModel {
         Integer gameId = addPlayerCommand.getGame().getId();
         Game game = Configuration.getSingleton().getGame(gameId);
 
-        if(game.getPlayerList().size() == 0)
+        if((game.getPlayerList().size() == 1) && (game.isGameStarted())){
+            notifyVictory(new NotifyVictoryCommand(game.getId(), game.getPlayerList().get(0)));
             remove(game);
+        }
     }
 
-    private void remove(Game game) {
+    public void notifyVictory(NotifyVictoryCommand notifyVictoryCommand) {
+        Game game = Configuration.getSingleton().getGame(notifyVictoryCommand.getGameId());
+
+        game.getRemoteUserList().forEach(remoteUser -> boardRemoteCommandTemplateAdapter
+                .notifyVictory(notifyVictoryCommand, remoteUser));
+    }
+
+    public void remove(Game game) {
         Configuration.getSingleton().removeGame(game.getId());
 
         List<User> remoteUserList = Configuration.getSingleton().getRemoteUserList();
@@ -109,6 +118,15 @@ public class GameModel {
 
         remoteUserList.forEach(remoteUser -> mainRemoteCommandTemplateAdapter
                 .flagAsReady(new FlagAsReadyCommand(flagAsReadyCommand.getPlayer(), localGame), remoteUser));
+    }
+
+    public void notifyWithdrawal(NotifyWithdrawalCommand notifyWithdrawalCommand) {
+        Game game = Configuration.getSingleton().getGame(notifyWithdrawalCommand.getGameId());
+
+        game.getRemoteUserList().forEach(remoteUser -> boardRemoteCommandTemplateAdapter
+                .notifyWithdrawal(notifyWithdrawalCommand, remoteUser));
+
+        removePlayer(new AddPlayerCommand(notifyWithdrawalCommand.getPlayer(), game, true));
     }
 
     public DefaultListModel<Game> getList() {
