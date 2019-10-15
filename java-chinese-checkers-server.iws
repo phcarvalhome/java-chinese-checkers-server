@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="68ec7581-204e-452f-8588-f8935fa8055a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+      <option value="module" />
+    </option>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1Pffq8AXQYewomgDkapb5j6dH1i" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/phcarvalho/model/communication/commandtemplate/remote/adapter" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.24367817" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.phcarvalho.model.communication.strategy.factory" />
+      <recent name="com.phcarvalho.model.exception" />
+      <recent name="com.phcarvalho.model.communication.commandtemplate" />
+      <recent name="com.phcarvalho.model.communication.connection" />
+      <recent name="com.phcarvalhome.view" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phcarvalho.model.communication.protocol.vo.command" />
+      <recent name="com.phcarvalho.model.communication.protocol.vo" />
+      <recent name="com.phcarvalho.model.communication.commandtemplate" />
+      <recent name="com.phcarvalho.model.communication.commandtemplate.remote.adapter" />
+      <recent name="com.phcarvalho.model.communication.strategy" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\PH\Workspace\Java\java-chinese-checkers-server\src\main\java\com\phcarvalho\model\communication\commandtemplate\remote\adapter" />
+      <recent name="C:\Users\PH\Workspace\Java\java-chinese-checkers-server\src\main" />
+      <recent name="C:\Users\PH\Workspace\Java\java-chinese-checkers-server\src\main\java\com\phcarvalho\model\communication\protocol\vo" />
+      <recent name="C:\Users\PH\Workspace\Java\java-chinese-checkers-server\src\main\java\com\phcarvalho\model\communication\strategy" />
+      <recent name="C:\Users\PH\Workspace\Java\java-chinese-checkers-server\src\main\java\com\phcarvalho\model\communication\commandtemplate" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.phcarvalho.Application" />
+      <module name="java-chinese-checkers-server" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Application" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="68ec7581-204e-452f-8588-f8935fa8055a" name="Default Changelist" comment="" />
+      <created>1566270259179</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1566270259179</updated>
+      <workItem from="1566270262774" duration="1039000" />
+      <workItem from="1566271434978" duration="22945000" />
+      <workItem from="1566434962536" duration="6932000" />
+      <workItem from="1566442232334" duration="7066000" />
+      <workItem from="1566449849578" duration="1498000" />
+      <workItem from="1566451364989" duration="182000" />
+      <workItem from="1566451563102" duration="498000" />
+      <workItem from="1566452076681" duration="709000" />
+      <workItem from="1566452802634" duration="3766000" />
+      <workItem from="1566456587019" duration="508000" />
+      <workItem from="1566457144785" duration="8775000" />
+      <workItem from="1566466541963" duration="6211000" />
+      <workItem from="1566527686535" duration="1300000" />
+      <workItem from="1566530356401" duration="218000" />
+      <workItem from="1566530589802" duration="38894000" />
+      <workItem from="1566750479438" duration="7453000" />
+      <workItem from="1566760189975" duration="13494000" />
+      <workItem from="1566774901233" duration="5075000" />
+      <workItem from="1566781107096" duration="4021000" />
+      <workItem from="1566786774005" duration="21671000" />
+      <workItem from="1566810792756" duration="4718000" />
+      <workItem from="1566822550253" duration="4246000" />
+      <workItem from="1566827885415" duration="3755000" />
+      <workItem from="1566835272088" duration="1830000" />
+      <workItem from="1566837119586" duration="1793000" />
+      <workItem from="1566838966385" duration="1959000" />
+      <workItem from="1567274628720" duration="736000" />
+      <workItem from="1567277433262" duration="1409000" />
+      <workItem from="1567279163753" duration="2867000" />
+      <workItem from="1567364723448" duration="1942000" />
+      <workItem from="1567366683441" duration="9517000" />
+      <workItem from="1567468773160" duration="1726000" />
+      <workItem from="1567470546355" duration="13612000" />
+      <workItem from="1567486961939" duration="6858000" />
+      <workItem from="1567574500763" duration="20187000" />
+      <workItem from="1567969608994" duration="16290000" />
+      <workItem from="1568160687443" duration="9278000" />
+      <workItem from="1568180800376" duration="8000" />
+      <workItem from="1568180997132" duration="4000" />
+      <workItem from="1568220942080" duration="23313000" />
+      <workItem from="1568244294591" duration="14009000" />
+      <workItem from="1568261560741" duration="4951000" />
+      <workItem from="1568484402983" duration="29942000" />
+      <workItem from="1568582179213" duration="32610000" />
+      <workItem from="1568776897920" duration="265000" />
+      <workItem from="1570673269049" duration="67000" />
+      <workItem from="1571133634464" duration="18000" />
+    </task>
+    <task id="LOCAL-00001" summary="Add first version">
+      <created>1568008979510</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1568008979510</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="true" />
+    <MESSAGE value="Add first version" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add first version" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints-defaults>
+        <breakpoint suspend="THREAD" type="java-line" />
+      </breakpoints-defaults>
+    </breakpoint-manager>
+  </component>
+</project>
