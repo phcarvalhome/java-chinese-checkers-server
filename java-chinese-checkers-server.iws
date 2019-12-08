@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="68ec7581-204e-452f-8588-f8935fa8055a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-chinese-checkers-server.iws" beforeDir="false" afterPath="$PROJECT_DIR$/java-chinese-checkers-server.iws" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -152,6 +153,7 @@
       <workItem from="1568776897920" duration="265000" />
       <workItem from="1570673269049" duration="67000" />
       <workItem from="1571133634464" duration="18000" />
+      <workItem from="1575836590392" duration="254000" />
     </task>
     <task id="LOCAL-00001" summary="Add first version">
       <created>1568008979510</created>
