@@ -4,17 +4,17 @@ Distributed Java application server using Sockets, RPC (RMI - Remote Method Invo
 
 ---
 
-Instituto Federal de Educação, Ciência e Tecnologia do Ceará
-Computer engineering 
-Parallel and Distributed Programming 
+## Instituto Federal de Educação, Ciência e Tecnologia do Ceará
 
-Project of Sockets/RMI
+### Computer Engineering - Parallel and Distributed Programming 
+### Project of Sockets/RMI
 
-1. Objective: Implement Chinese Checkers Game
-2. Basic Features
-2.1. Shift control, with definition of who starts the game
-2.2. Moving board pieces
-2.3. dropout detection
-2.4. restart game
-2.5. Chat for communication throughout the game
-2.6. winner detection
+- Objective: Implement Chinese Checkers Game
+
+- Basic Features:
+  - Shift control, with definition of who starts the game
+  - Moving board pieces
+  - Dropout detection
+  - Restart game
+  - Chat for communication throughout the game
+  - Winner detection
